@@ -1,7 +1,8 @@
 {
-  "name": "vite-template-solid",
+  "name": "live-mardown",
   "version": "0.0.0",
-  "description": "",
+  "description": "Markdown preview with use of folders",
+  "type": "module",
   "scripts": {
     "start": "vite",
     "dev": "vite",
@@ -9,8 +10,16 @@
     "serve": "vite preview"
   },
   "license": "MIT",
+  "author": "AndreSacilotto",
+  "keywords": [
+    "file system access",
+    "markdown",
+    "solidJS"
+  ],
   "devDependencies": {
     "@iconify-icon/solid": "^2.0.0",
+    "@types/markdown-it": "^13.0.7",
+    "@types/markdown-it-attrs": "^4.1.3",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "autoprefixer": "^10.4.18",
@@ -24,7 +33,10 @@
     "vite-plugin-solid": "^2.8.2"
   },
   "dependencies": {
+    "@types/wicg-file-system-access": "^2023.10.5",
     "markdown-it": "^14.0.0",
+    "markdown-it-attrs": "^4.1.6",
+    "markdown-it-deflist": "^3.0.0",
     "solid-js": "^1.8.11"
   }
 }
