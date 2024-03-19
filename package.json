@@ -1,6 +1,6 @@
 {
-  "name": "live-mardown",
-  "version": "0.0.0",
+  "name": "markdown-bundler",
+  "version": "0.1.0",
   "description": "Markdown preview with use of folders",
   "type": "module",
   "scripts": {
@@ -14,12 +14,13 @@
   "keywords": [
     "file system access",
     "markdown",
-    "solidJS"
+    "solidjs"
   ],
   "devDependencies": {
     "@iconify-icon/solid": "^2.0.0",
     "@types/markdown-it": "^13.0.7",
     "@types/markdown-it-attrs": "^4.1.3",
+    "@types/wicg-file-system-access": "^2023.10.5",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "autoprefixer": "^10.4.18",
@@ -33,15 +34,10 @@
     "vite-plugin-solid": "^2.8.2"
   },
   "dependencies": {
-    "@codemirror/state": "^6.4.1",
-    "@codemirror/view": "^6.26.0",
-    "@types/wicg-file-system-access": "^2023.10.5",
-    "highlight.js": "^11.9.0",
     "markdown-it": "^14.0.0",
     "markdown-it-attrs": "^4.1.6",
     "markdown-it-deflist": "^3.0.0",
     "md-to-pdf": "^5.2.4",
-    "solid-codemirror": "^2.3.1",
     "solid-js": "^1.8.11"
   }
 }

@@ -11,4 +11,6 @@
 	"editor.codeActionsOnSave": {
         "source.fixAll.eslint": "never"
     },
+	"typescript.preferences.quoteStyle": "double",
+	"javascript.preferences.quoteStyle": "double",
 }

@@ -1,7 +1,0 @@
-- Rename to Markdown-Bundler
-
-- Read/Search directory for md files. (Also allow individualization)
-
-- Allow reordering/"rename" of md files.
-
-- Merge all md files and export all as [md file, .pdf] or just view it  

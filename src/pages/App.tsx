@@ -1,49 +1,43 @@
-import { Show, type Component, createSignal } from 'solid-js';
-import { loadMarkdownFile, readFileContent, resaveMarkdownFile, saveMarkdownFile } from '../util/markdown';
+import { VoidComponent } from 'solid-js';
 import { Icon } from '@iconify-icon/solid';
+import { loadFile, loadFilesDirectoryDeep, loadFilesDirectoryDeepPaths, loadFilesDirectoryShallow, readFileContent, saveFile } from '../util/file_system_access';
+import { markdownLoadOptions, markdownSaveOptions } from '../util/markdown';
+import Tooltip from "../components/Tooltip";
 
-const App: Component = () =>
+const App: VoidComponent = () =>
 {
-	const [explorerBar, setExplorerBar] = createSignal(true);
-
-	function toggleExplorerBarToggle(){
-		setExplorerBar((prev) => !prev);
-	}
-
-	async function load() {
-		const fh = await loadMarkdownFile()
-		console.log(fh); 
+	async function load()
+	{
+		const fh = await loadFile(markdownLoadOptions)
+		console.log(fh);
 		console.log(await readFileContent(fh.file));
 	}
-	
-	let handle : FileSystemFileHandle | undefined;
-	async function save() {
+
+	async function save()
+	{
 		const str = "banana";
-		handle = await saveMarkdownFile(str);
+		await saveFile(str, markdownSaveOptions);
 	}
 
 	return (
-		<div class="flex w-[100vw] h-[100vh]">
-			<div id="activity-bar" class="bg-slate-500 w-16 flex flex-col items-center justify-around text-4xl">
-				<Icon icon="lucide:folder-edit" onClick={toggleExplorerBarToggle} class="hover:text-white" />
-				<Icon icon="lucide:scan-search" onClick={load} class="hover:text-white" />
-				<Icon icon="lucide:save" onClick={load} class="hover:text-white" />
-				<Icon icon="lucide:upload" onClick={load} class="hover:text-white" />
-				<Icon icon="lucide:download" onClick={load} class="hover:text-white" />
-				<Icon icon="ph:gear-light" onClick={load} class="hover:text-white" />
-			</div>
-			<Show when={explorerBar()}>
-				<div id="explorer-bar" class="bg-slate-600 w-48 flex flex-col">
-					<div id="structure" class="flex-1">structure</div>
-					<div class="bg-gray-800 w-full h-2" />
-					<div id="outline" class="flex-1">outline</div>
+		<>
+			<div class="flex w-[100vw] h-[100vh]">
+				<div id="activity-bar" class="bg-slate-500 w-16 flex flex-col items-center justify-around text-4xl">
+					<Tooltip tooltip="Save the moon">
+						<Icon icon="lucide:folder-edit" onClick={() => loadFilesDirectoryDeepPaths()} class="hover:text-white" />
+					</Tooltip>
+					<Icon icon="lucide:scan-search" onClick={load} class="hover:text-white" />
+					<Icon icon="lucide:save" onClick={load} class="hover:text-white" />
+					<Icon icon="lucide:upload" onClick={load} class="hover:text-white" />
+					<Icon icon="lucide:download" onClick={load} class="hover:text-white" />
+					<Icon icon="ph:gear-light" onClick={load} class="hover:text-white" />
 				</div>
-			</Show>
-			<div id="code-editor" class="bg-slate-200 flex-1 flex">
-				{/* <textarea class="flex-1 mx-4 bg-cyan-300" /> */}
-				
+				<div id="explorer-bar" class="bg-slate-600 flex-1 flex flex-col w-full">
+					<div class="h-16 bg-red-800">Upperbar</div>
+					<div class="flex-1">Content</div>
+				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 

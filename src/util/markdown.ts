@@ -45,46 +45,6 @@ export const markdownSaveOptions: SaveFilePickerOptions = {
 	excludeAcceptAllOption: false,
 }
 
-export interface FileWithHandle
-{
-	file: File,
-	handle: FileSystemHandle,
-}
-
-export async function loadMarkdownFile(): Promise<FileWithHandle>
-{
-	const [fileHandle] = await window.showOpenFilePicker(markdownLoadOptions);
-	const file = await fileHandle.getFile();
-	return { file: file, handle: fileHandle };
-}
-
-export async function saveMarkdownFile(data: FileSystemWriteChunkType, suggestedName?: string) 
-{
-	const newHandle = await window.showSaveFilePicker({ ...markdownSaveOptions, suggestedName });
-	await resaveMarkdownFile(newHandle, data);
-	return newHandle;
-}
-
-export async function resaveMarkdownFile(handle: FileSystemFileHandle, data: FileSystemWriteChunkType) 
-{
-	const writableStream = await handle.createWritable({ keepExistingData: false });
-	await writableStream.write(data);
-	await writableStream.close();
-}
-
-export function readFileContent(file: File)
-{
-	// string | ArrayBuffer | null
-	// ProgressEvent<FileReader>
-	return new Promise<string | ArrayBuffer | null>((resolve, reject) =>
-	{
-		const reader = new FileReader();
-		reader.onloadend = (ev) => { resolve(ev.target ? ev.target.result : null); };
-		reader.onerror = () => { reject(new Error("unable to read file: ")); };
-		reader.readAsText(file);
-	});
-}
-
 // #region Parser
 const Separator = "/";
 const NewLine = "\n";
