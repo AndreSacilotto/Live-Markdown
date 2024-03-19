@@ -3,6 +3,9 @@
 		"*.scss": "postcss",
 		"*.css": "tailwindcss",
 	},
+	"[tailwindcss]": {
+		"editor.defaultFormatter": "vscode.css-language-features"
+	},
 	"editor.wordWrap": "on",
 	"editor.formatOnSave": false,
 	"editor.codeActionsOnSave": {

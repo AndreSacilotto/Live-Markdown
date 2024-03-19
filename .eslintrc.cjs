@@ -19,6 +19,7 @@ module.exports = {
 			"error", { "checksVoidReturn": false  }
 		],
 		"@typescript-eslint/no-confusing-void-expression": "off",
+		"@typescript-eslint/no-floating-promises": "off",
 		"no-empty": "off",
 		"prefer-const": "warn",
 	},

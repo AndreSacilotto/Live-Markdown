@@ -1,5 +1,4 @@
 import MarkdownIt from "markdown-it";
-// @ts-expect-error "no typescript files exist" 
 import deflist from "markdown-it-deflist";
 import attrs from "markdown-it-attrs";
 import { splitPaths } from "./util_string";
@@ -46,13 +45,13 @@ export const markdownSaveOptions: SaveFilePickerOptions = {
 	excludeAcceptAllOption: false,
 }
 
-export interface FileWihtHandle
+export interface FileWithHandle
 {
 	file: File,
 	handle: FileSystemHandle,
 }
 
-export async function loadMarkdownFile(): Promise<FileWihtHandle>
+export async function loadMarkdownFile(): Promise<FileWithHandle>
 {
 	const [fileHandle] = await window.showOpenFilePicker(markdownLoadOptions);
 	const file = await fileHandle.getFile();
