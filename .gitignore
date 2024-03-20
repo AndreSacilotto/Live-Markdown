@@ -21,3 +21,6 @@ pnpm-debug.log*
 pnpm-lock.yaml
 
 .astro
+
+# tests
+coverage/

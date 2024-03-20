@@ -21,6 +21,9 @@ module.exports = {
 		"@typescript-eslint/no-confusing-void-expression": "off",
 		"@typescript-eslint/no-floating-promises": "off",
 		"@typescript-eslint/no-non-null-assertion": "off",
+		"@typescript-eslint/prefer-nullish-coalescing": [
+			"error", { "ignoreConditionalTests": true }
+		],
 		"no-empty": "off",
 		"prefer-const": "warn",
 	},

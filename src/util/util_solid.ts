@@ -1,5 +1,4 @@
-import { splitProps } from "solid-js";
-import { JSX } from "solid-js/jsx-runtime";
+import { JSX, Component, splitProps } from "solid-js";
 
 export type HtmlProps<T extends HTMLElement> = JSX.HTMLAttributes<T>;
 
@@ -11,4 +10,8 @@ export interface ChildrenProps {
 
 export function splitChildren<T extends ChildrenProps>(props: T) {
 	return splitProps(props, ["children"])
+}
+
+export interface Expose<T extends object>{
+	expose?: (exposed: T) => void, 
 }
