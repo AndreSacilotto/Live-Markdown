@@ -1,4 +1,4 @@
-# Live-Markdown
+# Markdown-Bundler
 Live markdown preview with folder. Made with use of SolidJS, Tailwind, Vite, and Markdown-it. Using the browser new System Access API.
 
 ## Running Locally

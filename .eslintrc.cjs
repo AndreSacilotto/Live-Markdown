@@ -14,9 +14,19 @@ module.exports = {
 		"solid/reactivity": "warn",
 		"solid/no-destructure": "warn",
 		"solid/jsx-no-undef": "error",
-		"@typescript-eslint/no-unused-vars": "warn",
+		"@typescript-eslint/no-unused-vars": [
+			"warn", {
+				"args": "all",
+				"argsIgnorePattern": "^_",
+				"caughtErrors": "all",
+				"caughtErrorsIgnorePattern": "^_",
+				"destructuredArrayIgnorePattern": "^_",
+				"varsIgnorePattern": "^_",
+				"ignoreRestSiblings": true
+			}
+		],
 		"@typescript-eslint/no-misused-promises": [
-			"error", { "checksVoidReturn": false  }
+			"error", { "checksVoidReturn": false }
 		],
 		"@typescript-eslint/no-confusing-void-expression": "off",
 		"@typescript-eslint/no-floating-promises": "off",

@@ -41,3 +41,7 @@ export function charIsLetter(str: string) {
 export function charIsDigit(str: string) {
 	return str >= '0' && str <= '9';
 }
+
+export function kbabify(str: string) {
+	return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($1, offset) => (offset ? "-" : "") + $1.toLowerCase())
+} 

@@ -121,86 +121,85 @@ export function joinMarkdownPath(mdPath: MdPath): string
 
 // #region Markdown Style
 
-export type StyleDeclarationCss = Record<string, string>;
+export type CssDeclaration = Record<string, string>; //Partial<CSSStyleDeclaration>;
 
 export interface MarkdownStyle
 {
-	/** others */
-	[tag: string]: StyleDeclarationCss | undefined,
+	[selector: string] : CssDeclaration | undefined;
 	/** headers 1*/
-	h1?: StyleDeclarationCss;
+	h1?: CssDeclaration;
 	/** headers 2*/
-	h2?: StyleDeclarationCss;
+	h2?: CssDeclaration;
 	/** headers 3*/
-	h3?: StyleDeclarationCss;
+	h3?: CssDeclaration;
 	/** headers 4*/
-	h4?: StyleDeclarationCss;
+	h4?: CssDeclaration;
 	/** headers 5*/
-	h5?: StyleDeclarationCss;
+	h5?: CssDeclaration;
 	/** headers 6*/
-	h6?: StyleDeclarationCss;
+	h6?: CssDeclaration;
 	/** paragraph */
-	p?: StyleDeclarationCss;
+	p?: CssDeclaration;
 	/** text style - bold */
-	strong?: StyleDeclarationCss;
+	strong?: CssDeclaration;
 	/** text style - italic */
-	em?: StyleDeclarationCss;
+	em?: CssDeclaration;
 	/** link and/or anchor */
-	a?: StyleDeclarationCss;
+	a?: CssDeclaration;
 	/** images */
-	img?: StyleDeclarationCss;
+	img?: CssDeclaration;
 	/** list: unordered */
-	ul?: StyleDeclarationCss;
+	ul?: CssDeclaration;
 	/** list: ordered */
-	ol?: StyleDeclarationCss;
+	ol?: CssDeclaration;
 	/** list: item */
-	li?: StyleDeclarationCss;
+	li?: CssDeclaration;
 	/** blockquote */
-	blockquote?: StyleDeclarationCss;
+	blockquote?: CssDeclaration;
 	/** code block ``` */
-	code?: StyleDeclarationCss;
+	code?: CssDeclaration;
 	/** code field ` */
-	pre?: StyleDeclarationCss;
+	pre?: CssDeclaration;
 	/** horizontal rule */
-	hr?: StyleDeclarationCss;
+	hr?: CssDeclaration;
 	/** table */
-	table?: StyleDeclarationCss;
+	table?: CssDeclaration;
 	/** table: head */
-	thead?: StyleDeclarationCss;
+	thead?: CssDeclaration;
 	/** table: header */
-	th?: StyleDeclarationCss;
+	th?: CssDeclaration;
 	/** table: body */
-	tbody?: StyleDeclarationCss;
+	tbody?: CssDeclaration;
 	/** table: row */
-	tr?: StyleDeclarationCss;
+	tr?: CssDeclaration;
 	/** table: data cell */
-	td?: StyleDeclarationCss;
+	td?: CssDeclaration;
 
 	/** strikethrough - extended markdown */
-	del?: StyleDeclarationCss;
+	del?: CssDeclaration;
 	/** superscript - extended markdown */
-	sup?: StyleDeclarationCss;
+	sup?: CssDeclaration;
 	/** subscript - extended markdown */
-	sub?: StyleDeclarationCss;
+	sub?: CssDeclaration;
 	/** description list - extended markdown */
-	dl?: StyleDeclarationCss;
+	dl?: CssDeclaration;
 	/** description list: terms - extended markdown */
-	dt?: StyleDeclarationCss;
+	dt?: CssDeclaration;
 	/** description list: details - extended markdown */
-	dd?: StyleDeclarationCss;
+	dd?: CssDeclaration;
 	/** task list - extended markdown */
-	"input[type=checkbox]"?: StyleDeclarationCss;
+	"input[type=checkbox]"?: CssDeclaration;
 }
 
-export function JsonToCss(jsonCSS: Record<string, StyleDeclarationCss>)
+export function JsonToCss(jsonCSS: Record<string, CssDeclaration>)
 {
 	const arr: string[] = [];
 	for (const [selector, declaration] of Object.entries(jsonCSS))
 	{
 		// if(!declaration)
 		// 	continue;
-		const entries = Object.entries(declaration).map(([property, value]) => `${property}: ${value};`).join(" ");
-		arr.push(`${selector} { ${entries} }`)
+		const entries = Object.entries(declaration).map(([property, value]) => `${property}: "${value}";`);
+		arr.push(`${selector} { ${entries.join(" ")} }`)
 	}
 	return arr.join("\n")
 }

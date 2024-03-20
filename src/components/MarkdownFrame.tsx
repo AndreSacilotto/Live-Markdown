@@ -1,5 +1,5 @@
-import { Component, createEffect, createSignal, splitProps } from "solid-js";
-import { DefaultMd, JsonToCss, MarkdownStyle, MarkdownText, StyleDeclarationCss } from "../util/markdown";
+import { VoidComponent, createEffect, createSignal, splitProps } from "solid-js";
+import { CssDeclaration, DefaultMd, JsonToCss, MarkdownStyle, MarkdownText } from "../util/markdown";
 import { Expose, HtmlProps } from "../util/util_solid";
 import { isString } from "../util/util_string";
 
@@ -15,11 +15,20 @@ type MarkdownPreviewFrameProps = {
 & ({ htmlContent?: string, mdContent?: never } | { htmlContent?: never, mdContent?: MarkdownText })
 & Expose<MarkdownPreviewFrameExpose> 
 
-const printOnFrameLoad = "<script>window.print();</script>"
+const scriptPrintOnFrameLoad = "<script>window.print();</script>"
+
+const scriptMessage = `
+<script>
+window.addEventListener('message', (ev) => {
+	if(ev.data == "print")
+		console.log(ev);
+}, false);
+</script>
+`
 // const cssHead = `<link type="text/css" rel="stylesheet" href=${props.cssAsset} />`;
 // const scriptHead = `<script src=${props.jsAsset}></script>`;
 
-export const MarkdownFrame: Component<IFrameProps & MarkdownPreviewFrameProps> = (props) =>
+export const MarkdownFrame: VoidComponent<IFrameProps & MarkdownPreviewFrameProps> = (props) =>
 {
 	const [getMdStyle, setMdStyle] = createSignal("<style></style>");
 
@@ -33,7 +42,7 @@ export const MarkdownFrame: Component<IFrameProps & MarkdownPreviewFrameProps> =
 			if(isString(customProps.mdStyle))
 				st = customProps.mdStyle as string;
 			else
-				st = JsonToCss(customProps.mdStyle as Record<string, StyleDeclarationCss>);
+				st = JsonToCss(customProps.mdStyle as Record<string, CssDeclaration>);
 			setMdStyle("<style>" + st + "</style>");
 			setContent();
 		}
@@ -72,14 +81,14 @@ export const MarkdownFrame: Component<IFrameProps & MarkdownPreviewFrameProps> =
 	{
 		console.log("frame", frameRef);
 		if (frameRef?.contentWindow)
-			frameRef.contentWindow.print();
+			frameRef.contentWindow.postMessage("print", "*");
 		else
-			setContent(printOnFrameLoad);
+			setContent(scriptPrintOnFrameLoad);
 	}
 
 	return (
 		<>
-			<button onClick={() => printFrame()}>CLICK</button>
+			{/* <button onClick={() => printFrame()}>CLICK</button> */}
 			<iframe ref={frameRef} {...frameProps} />
 		</>
 	);
