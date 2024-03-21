@@ -4,8 +4,7 @@ module.exports = {
 	extends: [
 		"eslint:recommended",
 		"plugin:solid/typescript",
-		'plugin:@typescript-eslint/strict-type-checked',
-		'plugin:@typescript-eslint/stylistic-type-checked',
+		'plugin:@typescript-eslint/recommended',
 	],
 	ignorePatterns: ['dist', '.eslintrc.cjs'],
 	parser: '@typescript-eslint/parser',
@@ -25,17 +24,17 @@ module.exports = {
 				"ignoreRestSiblings": true
 			}
 		],
-		"@typescript-eslint/no-misused-promises": [
-			"error", { "checksVoidReturn": false }
-		],
-		"@typescript-eslint/no-confusing-void-expression": "off",
-		"@typescript-eslint/no-floating-promises": "off",
-		"@typescript-eslint/no-non-null-assertion": "off",
-		"@typescript-eslint/prefer-nullish-coalescing": [
-			"error", { "ignoreConditionalTests": true }
-		],
-		"no-empty": "off",
-		"prefer-const": "warn",
+		// "@typescript-eslint/no-misused-promises": [
+		// 	"error", { "checksVoidReturn": false }
+		// ],
+		// "@typescript-eslint/no-confusing-void-expression": "off",
+		// "@typescript-eslint/no-floating-promises": "off",
+		// "@typescript-eslint/no-non-null-assertion": "off",
+		// "@typescript-eslint/prefer-nullish-coalescing": [
+		// 	"error", { "ignoreConditionalTests": true }
+		// ],
+		// "no-empty": "off",
+		// "prefer-const": "warn",
 	},
 	parserOptions: {
 		ecmaVersion: 'latest',

@@ -10,15 +10,19 @@ const serveConfig = {
 }
 
 export default defineConfig({
-  plugins: [
-    // https://github.com/thetarnav/solid-devtools/tree/main/packages/extension#readme
-    // devtools(),
-    solidPlugin(),
-  ],
-  server: serveConfig,
-  preview: serveConfig,
-  build: {
-	// outDir: './build',
-    target: 'esnext',
-  },
+	plugins: [
+		// https://github.com/thetarnav/solid-devtools/tree/main/packages/extension#readme
+		// devtools(),
+		solidPlugin(),
+	],
+	server: serveConfig,
+	preview: serveConfig,
+	build: {
+		// outDir: './build',
+		target: 'esnext',
+	},
+	optimizeDeps: {
+		// Add both @codemirror/state and @codemirror/view to included deps to optimize
+		include: ['@codemirror/state', '@codemirror/view'],
+	}
 });

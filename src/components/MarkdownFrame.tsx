@@ -1,19 +1,21 @@
-import { VoidComponent, createEffect, createSignal, splitProps } from "solid-js";
-import { CssDeclaration, DefaultMd, JsonToCss, MarkdownStyle, MarkdownText } from "../util/markdown";
+import { VoidComponent, createEffect, createSignal, onMount, splitProps } from "solid-js";
+import { DefaultMd, JsonToCss, MarkdownStyle, MarkdownText } from "../util/markdown";
 import { Expose, HtmlProps } from "../util/util_solid";
 import { isString } from "../util/util_string";
+import { StyleSpec } from "style-mod";
 
 type IFrameProps = Omit<HtmlProps<HTMLIFrameElement>, "ref">;
 
-export interface MarkdownPreviewFrameExpose { 
+export interface MarkdownPreviewFrameExpose
+{
 	printFrame: () => void,
 }
 
-type MarkdownPreviewFrameProps = { 
+type MarkdownPreviewFrameProps = {
 	mdStyle?: MarkdownStyle | string,
-} 
-& ({ htmlContent?: string, mdContent?: never } | { htmlContent?: never, mdContent?: MarkdownText })
-& Expose<MarkdownPreviewFrameExpose> 
+}
+	& ({ htmlContent?: string, mdContent?: never } | { htmlContent?: never, mdContent?: MarkdownText })
+	& Expose<MarkdownPreviewFrameExpose>
 
 const scriptPrintOnFrameLoad = "<script>window.print();</script>"
 
@@ -36,13 +38,15 @@ export const MarkdownFrame: VoidComponent<IFrameProps & MarkdownPreviewFrameProp
 
 	createEffect(() =>
 	{
-		if (customProps.mdStyle)
+		const style = customProps.mdStyle;
+		console.log(style);
+		if (style)
 		{
-			let st : string;
-			if(isString(customProps.mdStyle))
-				st = customProps.mdStyle as string;
+			let st: string;
+			if (isString(style))
+				st = style as string;
 			else
-				st = JsonToCss(customProps.mdStyle as Record<string, CssDeclaration>);
+				st = JsonToCss(style as Record<string, StyleSpec>);
 			setMdStyle("<style>" + st + "</style>");
 			setContent();
 		}
@@ -52,9 +56,9 @@ export const MarkdownFrame: VoidComponent<IFrameProps & MarkdownPreviewFrameProp
 		if (customProps.mdContent || customProps.htmlContent)
 			setContent();
 	});
-	createEffect(() =>{
-		if(customProps.expose)
-			customProps.expose({ printFrame });
+	createEffect(() =>
+	{
+		customProps.expose?.({ printFrame });
 	});
 
 	let frameRef: HTMLIFrameElement | undefined;
@@ -74,8 +78,16 @@ export const MarkdownFrame: VoidComponent<IFrameProps & MarkdownPreviewFrameProp
 	{
 		if (!frameRef)
 			return;
-		const html = customProps.mdContent ? DefaultMd.render(customProps.mdContent) : customProps.htmlContent;
+
+		let html: string;
+		if (customProps.mdContent)
+			html = DefaultMd.render(customProps.mdContent);
+		else if (customProps.htmlContent)
+			html = customProps.htmlContent;
+		else
+			html = "";
 		frameRef.srcdoc = getMdStyle() + html + extra;
+		console.log(frameRef.srcdoc);
 	}
 	function printFrame()
 	{

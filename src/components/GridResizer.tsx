@@ -72,7 +72,7 @@ export const GridResizer: ParentComponent<GridResizerProps> = (props) =>
 	return (
 		<div
 			ref={(r) => setRef(r)}
-			class={twMerge("flex items-center justify-center", (props.isHorizontal ? "h-2.5 cursor-row-resize" : "w-2.5 cursor-col-resize"), props.class)}
+			class={twMerge("select-none flex flex-col items-center justify-center", (props.isHorizontal ? "h-2.5 cursor-row-resize" : "w-2.5 cursor-col-resize"), props.class)}
 			{...spreadDivProps}
 		>
 			{props.children}

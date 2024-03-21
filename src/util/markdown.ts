@@ -2,6 +2,7 @@ import MarkdownIt from "markdown-it";
 import deflist from "markdown-it-deflist";
 import attrs from "markdown-it-attrs";
 import { splitPaths } from "./util_string";
+import { StyleSpec } from "style-mod";
 
 export type MarkdownText = string;
 
@@ -121,77 +122,77 @@ export function joinMarkdownPath(mdPath: MdPath): string
 
 // #region Markdown Style
 
-export type CssDeclaration = Record<string, string>; //Partial<CSSStyleDeclaration>;
+// export type StyleDeclaration = Record<string, string>; //Partial<CSSStyleDeclaration>;
 
 export interface MarkdownStyle
 {
-	[selector: string] : CssDeclaration | undefined;
+	[selector: string] : StyleSpec | undefined;
 	/** headers 1*/
-	h1?: CssDeclaration;
+	h1?: StyleSpec;
 	/** headers 2*/
-	h2?: CssDeclaration;
+	h2?: StyleSpec;
 	/** headers 3*/
-	h3?: CssDeclaration;
+	h3?: StyleSpec;
 	/** headers 4*/
-	h4?: CssDeclaration;
+	h4?: StyleSpec;
 	/** headers 5*/
-	h5?: CssDeclaration;
+	h5?: StyleSpec;
 	/** headers 6*/
-	h6?: CssDeclaration;
+	h6?: StyleSpec;
 	/** paragraph */
-	p?: CssDeclaration;
+	p?: StyleSpec;
 	/** text style - bold */
-	strong?: CssDeclaration;
+	strong?: StyleSpec;
 	/** text style - italic */
-	em?: CssDeclaration;
+	em?: StyleSpec;
 	/** link and/or anchor */
-	a?: CssDeclaration;
+	a?: StyleSpec;
 	/** images */
-	img?: CssDeclaration;
+	img?: StyleSpec;
 	/** list: unordered */
-	ul?: CssDeclaration;
+	ul?: StyleSpec;
 	/** list: ordered */
-	ol?: CssDeclaration;
+	ol?: StyleSpec;
 	/** list: item */
-	li?: CssDeclaration;
+	li?: StyleSpec;
 	/** blockquote */
-	blockquote?: CssDeclaration;
+	blockquote?: StyleSpec;
 	/** code block ``` */
-	code?: CssDeclaration;
+	code?: StyleSpec;
 	/** code field ` */
-	pre?: CssDeclaration;
+	pre?: StyleSpec;
 	/** horizontal rule */
-	hr?: CssDeclaration;
+	hr?: StyleSpec;
 	/** table */
-	table?: CssDeclaration;
+	table?: StyleSpec;
 	/** table: head */
-	thead?: CssDeclaration;
+	thead?: StyleSpec;
 	/** table: header */
-	th?: CssDeclaration;
+	th?: StyleSpec;
 	/** table: body */
-	tbody?: CssDeclaration;
+	tbody?: StyleSpec;
 	/** table: row */
-	tr?: CssDeclaration;
+	tr?: StyleSpec;
 	/** table: data cell */
-	td?: CssDeclaration;
+	td?: StyleSpec;
 
 	/** strikethrough - extended markdown */
-	del?: CssDeclaration;
+	del?: StyleSpec;
 	/** superscript - extended markdown */
-	sup?: CssDeclaration;
+	sup?: StyleSpec;
 	/** subscript - extended markdown */
-	sub?: CssDeclaration;
+	sub?: StyleSpec;
 	/** description list - extended markdown */
-	dl?: CssDeclaration;
+	dl?: StyleSpec;
 	/** description list: terms - extended markdown */
-	dt?: CssDeclaration;
+	dt?: StyleSpec;
 	/** description list: details - extended markdown */
-	dd?: CssDeclaration;
+	dd?: StyleSpec;
 	/** task list - extended markdown */
-	"input[type=checkbox]"?: CssDeclaration;
+	"input[type=checkbox]"?: StyleSpec;
 }
 
-export function JsonToCss(jsonCSS: Record<string, CssDeclaration>)
+export function JsonToCss(jsonCSS: Record<string, StyleSpec>)
 {
 	const arr: string[] = [];
 	for (const [selector, declaration] of Object.entries(jsonCSS))

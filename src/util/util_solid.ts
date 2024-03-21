@@ -1,4 +1,4 @@
-import { JSX, Component, splitProps } from "solid-js";
+import { JSX, splitProps } from "solid-js";
 
 export type HtmlProps<T extends HTMLElement> = JSX.HTMLAttributes<T>;
 
