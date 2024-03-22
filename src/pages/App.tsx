@@ -12,7 +12,6 @@ const App: VoidComponent = () =>
 					<div class="bg-green-600">{"C".repeat(50)}</div>
 				</div>
 			</div> */}
-
 			<SPA />
 		</>
 	);

@@ -1,3 +1,5 @@
+import JSZip from "jszip";
+
 export interface FileWithHandle
 {
 	file: File,
@@ -54,7 +56,6 @@ export async function loadDirectory(options: DirectoryPickerOptions = { mode: "r
 {
 	return await window.showDirectoryPicker(options);
 }
-
 
 export interface DirectoryWithEntries
 {
@@ -157,3 +158,21 @@ export async function loadFilesDirectoryDeepPaths(options: DirectoryPickerOption
 	}
 
 }
+
+//#region Zip
+
+// export function createZip() {
+// 	return new JSZip();
+// }
+
+export async function zipToBuffer(zip: JSZip) {
+	const content = await zip.generateAsync({ type: "blob"});
+	const buffer = await content.arrayBuffer();
+	return buffer;
+}
+
+export async function saveZip(zip: JSZip, options?: SaveFilePickerOptions) {
+	const buffer = await zipToBuffer(zip);
+	saveFile(buffer, options);
+}
+

@@ -66,7 +66,6 @@ export const GridResizer: ParentComponent<GridResizerProps> = (props) =>
 			window.removeEventListener('mouseup', onResizeEnd);
 			window.removeEventListener('touchend', onResizeEnd);
 		}
-
 	});
 
 	return (

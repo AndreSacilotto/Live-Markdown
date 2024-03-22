@@ -39,7 +39,6 @@ export const MarkdownFrame: VoidComponent<IFrameProps & MarkdownPreviewFrameProp
 	createEffect(() =>
 	{
 		const style = customProps.mdStyle;
-		console.log(style);
 		if (style)
 		{
 			let st: string;
@@ -87,15 +86,15 @@ export const MarkdownFrame: VoidComponent<IFrameProps & MarkdownPreviewFrameProp
 		else
 			html = "";
 		frameRef.srcdoc = getMdStyle() + html + extra;
-		console.log(frameRef.srcdoc);
+		// console.log(frameRef.srcdoc);
 	}
 	function printFrame()
 	{
-		console.log("frame", frameRef);
-		if (frameRef?.contentWindow)
-			frameRef.contentWindow.postMessage("print", "*");
-		else
-			setContent(scriptPrintOnFrameLoad);
+		// console.log("frame", frameRef);
+		// if (frameRef?.contentWindow)
+		// 	frameRef.contentWindow.postMessage("print", "*");
+		// else
+		setContent(scriptPrintOnFrameLoad);
 	}
 
 	return (
