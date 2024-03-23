@@ -1,5 +1,94 @@
 import JSZip from "jszip";
+import { splitPaths } from "./util_string";
 
+//#region Browser
+
+export function isFirefox(){
+	return navigator.userAgent.search("Firefox") > -1;
+}
+
+export function isSafari(){
+	// @ts-ignore: browser dependent
+	return !!window.safari;
+}
+
+
+export function isChromium(){
+	// @ts-ignore: browser dependent
+	return !!window.chrome;
+}
+
+//#endregion
+
+//#region URI
+
+// class URI{
+// 	static readonly empty = "";
+// 	fullpath: string;
+// 	directory: string;
+// 	file: string;
+// 	extension: string;
+// 	constructor(fullpath: string, isFile: boolean) {
+// 		this.fullpath = fullpath;
+// 		const lines = splitPaths(fullpath);
+// 		if(lines[lines.length-1] )
+
+// 		this.directory = lines.slice(0, -1).join()
+// 	}
+
+// }
+
+// console.clear();
+// console.log(splitPaths("D:\\Defaults\\Desktop\\md"));
+// console.log(splitPaths("D:\\Defaults\\Desktop\\md\\"));
+// console.log(splitPaths("D:\\Defaults\\Desktop\\md\\files.md"));
+
+
+//#endregion
+
+//#region FileSystemAPI
+
+function isFunction(possibleFunction : unknown) {
+	return typeof(possibleFunction) === typeof(Function);
+}
+
+export function fsaSupportCheck(){
+	return isFunction(window.showOpenFilePicker) && isFunction(window.showDirectoryPicker) && isFunction(window.showOpenFilePicker);
+}
+
+// https://github.com/microsoft/vscode/blob/711ca555f624bfd5c86a1eabcf3b1a7b6fca9cbd/src/vs/workbench/services/dialogs/browser/fileDialogService.ts#L51
+// https://github.com/microsoft/vscode/blob/711ca555f624bfd5c86a1eabcf3b1a7b6fca9cbd/src/vs/platform/files/browser/htmlFileSystemProvider.ts#L260
+// https://developer.chrome.com/docs/capabilities/web-apis/file-system-access#:~:text=recursive%3A%20true%20%7D)%3B-,Deleting%20a%20file%20or%20folder%20directly,remove()%3B
+export async function renameFile(fileHandle: FileSystemFileHandle, newName: URI) 
+{
+	//  @ts-ignore: there is no rename/move (yet) (yet, flag only)
+	const move = fileHandle.move;
+	if(isFunction(move)){
+		await move("newName");
+		return;
+	}
+}
+
+export async function deleteFile(fileHandle: FileSystemFileHandle, dirHandle: FileSystemDirectoryHandle, newName: URI) 
+{
+	// @ts-ignore: there is no remove (yet, flag only)
+	const remove = fileHandle.remove;
+	if(isFunction(remove)){
+		await remove("newName");
+		return;
+	}
+
+	dirHandle.removeEntry(fileHandle.name);
+}
+
+export async function deleteDirectory(parentDirHandle: FileSystemDirectoryHandle, dirHandle: FileSystemDirectoryHandle, recursive: boolean)
+{
+	return await parentDirHandle.removeEntry(dirHandle.name, { recursive })
+}
+
+//#endregion
+
+//#region FileSystemAPI File
 export interface FileWithHandle
 {
 	file: File,
@@ -50,8 +139,9 @@ export function readFileContent(file: File)
 		reader.readAsText(file);
 	});
 }
+//#endregion
 
-
+//#region FileSystemAPI Directory
 export async function loadDirectory(options: DirectoryPickerOptions = { mode: "read" }): Promise<FileSystemDirectoryHandle>
 {
 	return await window.showDirectoryPicker(options);
@@ -82,7 +172,6 @@ export async function loadFilesDirectoryShallow(options: DirectoryPickerOptions 
 	// console.log(entries);
 	return entries;
 }
-
 export async function loadFilesDirectoryDeep(options: DirectoryPickerOptions = { mode: "read" }, maxRecursion = 1000)
 {
 	let recursionCount = 0;
@@ -111,15 +200,12 @@ export async function loadFilesDirectoryDeep(options: DirectoryPickerOptions = {
 		}
 	}
 }
-
-
 export interface DirectoryWithEntriesWithPath
 {
 	root: FileSystemDirectoryHandle;
 	directory: { path: string[], handle: FileSystemDirectoryHandle}[];
 	files: ({ path: string[] } & FileWithHandle)[];
 }
-
 export async function loadFilesDirectoryDeepPaths(options: DirectoryPickerOptions = { mode: "read" }, maxRecursion = 1000)
 {
 	let recursionCount = 0;
@@ -158,6 +244,7 @@ export async function loadFilesDirectoryDeepPaths(options: DirectoryPickerOption
 	}
 
 }
+//#endregion
 
 //#region Zip
 
@@ -176,3 +263,4 @@ export async function saveZip(zip: JSZip, options?: SaveFilePickerOptions) {
 	saveFile(buffer, options);
 }
 
+//#endregion Zip

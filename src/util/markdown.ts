@@ -1,8 +1,9 @@
 import MarkdownIt from "markdown-it";
 import deflist from "markdown-it-deflist";
 import attrs from "markdown-it-attrs";
-import { splitPaths } from "./util_string";
-import { StyleSpec } from "style-mod";
+import { splitPaths, isString, splitLines } from "./util_string";
+import { JSX } from "solid-js/jsx-runtime";
+import { RecursiveObj } from "./util_types";
 
 export type MarkdownText = string;
 
@@ -53,10 +54,7 @@ export const markdownSaveOptions: SaveFilePickerOptions = {
 const Separator = "/";
 const NewLine = "\n";
 
-export interface MdPath
-{
-	[key: string]: MdPath | string[]
-}
+export type RecursivePath = RecursiveObj<string>;
 
 // md break := "<!--- [path/to/file] -->"
 export function markdownBreak(...path: string[])
@@ -64,36 +62,48 @@ export function markdownBreak(...path: string[])
 	return `<!--- [${path.join(Separator)}] -->`;
 }
 
-export function parseMarkdownWithBreak(...mdLines: string[]): MdPath
+export function parseMarkdownWithBreak(...mdLines: string[]): RecursivePath
 {
-	const mdPath: MdPath = {};
-	let arr: string[] = [];
-	for (const line of mdLines)
-	{
+	const mdPath: RecursivePath = {};
+	
+	let current : RecursivePath | null = null;
+	let value: string[] = [];
+	let key = "";
+	for (const line of mdLines) {
 		const match = line.match(/^<!---.*\[(.*)\].*-->/);
 		if (match)
 		{
 			const paths = splitPaths(match[1]);
 			const len1 = paths.length - 1;
 
-			let current: MdPath = mdPath;
+			// save last match
+			if(current){
+				current[key] = value.length > 0 ? value.join(NewLine) : "";
+				//reset
+				value = [];
+			}
+			
+			key = paths[len1];
+			current = mdPath;
 			for (let i = 0; i < len1; i++)
 			{
 				const p = paths[i];
 				if (!(p in current))
 					current[p] = {};
-				current = current[p] as MdPath;
+				current = current[p] as RecursivePath;
 			}
-			arr = []
-			current[paths[len1]] = arr;
 		}
 		else
-			arr.push(line);
+			value.push(line);
 	}
+	
+	if(current)
+		current[key] = value.join(NewLine);
+
 	return mdPath;
 }
 
-export function joinMarkdownPath(mdPath: MdPath): string
+export function joinMarkdownPath(mdPath: RecursivePath): string
 {
 	let output = "";
 	const path: string[] = [];
@@ -101,98 +111,119 @@ export function joinMarkdownPath(mdPath: MdPath): string
 
 	return output.trim();
 
-	function Recursive(mdPath: MdPath)
+	function Recursive(mdPath: RecursivePath)
 	{
 		for (const [key, value] of Object.entries(mdPath))
 		{
-			if (Array.isArray(value))
+			if (isString(value) /*Array.isArray(value)*/)
 			{
-				output += markdownBreak(...path, key) + NewLine + value.join(NewLine) + NewLine;
+				output += markdownBreak(...path, key) + NewLine + value + NewLine;
 			}
 			else
 			{
 				path.push(key);
-				Recursive(value);
+				Recursive(value as RecursivePath);
 				path.pop();
 			}
 		}
 	}
 }
+
+// const mdPath : RecursivePath = { 
+// 	banana:{
+// 		coelho: {
+// 			vidro: "111111111",
+// 			"lasanha.md": "3333333333"
+// 		},
+// 	},
+// 	"banana.md": "222222222\n333",
+// }
+
+// console.clear();
+// const join = joinMarkdownPath(mdPath);
+// const split = [...splitLines(join)];
+// const parse = parseMarkdownWithBreak(...split);
+
+// console.log(mdPath);
+// console.log(join);
+// console.log(split);
+// console.log(parse);
+
 //#endregion
 
 // #region Markdown Style
 
-// export type StyleDeclaration = Record<string, string>; //Partial<CSSStyleDeclaration>;
+export type StyleDeclaration = JSX.CSSProperties; //Record<string, string>; //Partial<CSSStyleDeclaration>;
 
 export interface MarkdownStyle
 {
-	[selector: string] : StyleSpec | undefined;
+	[selector: string] : StyleDeclaration | undefined;
 	/** headers 1*/
-	h1?: StyleSpec;
+	h1?: StyleDeclaration;
 	/** headers 2*/
-	h2?: StyleSpec;
+	h2?: StyleDeclaration;
 	/** headers 3*/
-	h3?: StyleSpec;
+	h3?: StyleDeclaration;
 	/** headers 4*/
-	h4?: StyleSpec;
+	h4?: StyleDeclaration;
 	/** headers 5*/
-	h5?: StyleSpec;
+	h5?: StyleDeclaration;
 	/** headers 6*/
-	h6?: StyleSpec;
+	h6?: StyleDeclaration;
 	/** paragraph */
-	p?: StyleSpec;
+	p?: StyleDeclaration;
 	/** text style - bold */
-	strong?: StyleSpec;
+	strong?: StyleDeclaration;
 	/** text style - italic */
-	em?: StyleSpec;
+	em?: StyleDeclaration;
 	/** link and/or anchor */
-	a?: StyleSpec;
+	a?: StyleDeclaration;
 	/** images */
-	img?: StyleSpec;
+	img?: StyleDeclaration;
 	/** list: unordered */
-	ul?: StyleSpec;
+	ul?: StyleDeclaration;
 	/** list: ordered */
-	ol?: StyleSpec;
+	ol?: StyleDeclaration;
 	/** list: item */
-	li?: StyleSpec;
+	li?: StyleDeclaration;
 	/** blockquote */
-	blockquote?: StyleSpec;
+	blockquote?: StyleDeclaration;
 	/** code block ``` */
-	code?: StyleSpec;
+	code?: StyleDeclaration;
 	/** code field ` */
-	pre?: StyleSpec;
+	pre?: StyleDeclaration;
 	/** horizontal rule */
-	hr?: StyleSpec;
+	hr?: StyleDeclaration;
 	/** table */
-	table?: StyleSpec;
+	table?: StyleDeclaration;
 	/** table: head */
-	thead?: StyleSpec;
+	thead?: StyleDeclaration;
 	/** table: header */
-	th?: StyleSpec;
+	th?: StyleDeclaration;
 	/** table: body */
-	tbody?: StyleSpec;
+	tbody?: StyleDeclaration;
 	/** table: row */
-	tr?: StyleSpec;
+	tr?: StyleDeclaration;
 	/** table: data cell */
-	td?: StyleSpec;
+	td?: StyleDeclaration;
 
 	/** strikethrough - extended markdown */
-	del?: StyleSpec;
+	del?: StyleDeclaration;
 	/** superscript - extended markdown */
-	sup?: StyleSpec;
+	sup?: StyleDeclaration;
 	/** subscript - extended markdown */
-	sub?: StyleSpec;
+	sub?: StyleDeclaration;
 	/** description list - extended markdown */
-	dl?: StyleSpec;
+	dl?: StyleDeclaration;
 	/** description list: terms - extended markdown */
-	dt?: StyleSpec;
+	dt?: StyleDeclaration;
 	/** description list: details - extended markdown */
-	dd?: StyleSpec;
+	dd?: StyleDeclaration;
 	/** task list - extended markdown */
-	"input[type=checkbox]"?: StyleSpec;
+	"input[type=checkbox]"?: StyleDeclaration;
 }
 
-export function JsonToCss(jsonCSS: Record<string, StyleSpec>)
+export function JsonToCss(jsonCSS: Record<string, StyleDeclaration>)
 {
 	const arr: string[] = [];
 	for (const [selector, declaration] of Object.entries(jsonCSS))

@@ -5,14 +5,14 @@ import { splitLines } from "./util_string";
 // ------ TESTING
 
 test('MdPath to MdBreak to MdPath', () => { 
-	const mdPath : MD.MdPath = { 
+	const mdPath : MD.RecursivePath = { 
 		banana:{
 			coelho: {
-				vidro: ["111111111"],
-				lasanha: ["3333333333"]
+				vidro: "111111111",
+				lasanha: "3333333333"
 			},
 		},
-		"banana.md": ["222222222", "333"]
+		"banana.md": "222222222 333",
 	}
 	const join = MD.joinMarkdownPath(mdPath);
 	const parse = MD.parseMarkdownWithBreak(...splitLines(join));
